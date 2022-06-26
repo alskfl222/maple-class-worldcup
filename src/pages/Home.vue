@@ -6,12 +6,28 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-const router = useRouter()
+import { useRouter } from 'vue-router';
+import { useSelectionStore } from '../stores/class';
+import { decidePreRound } from '../utils';
+const router = useRouter();
+const selection = useSelectionStore();
+
+selection.record = [];
+selection.randomize();
+const { match, roundCount } = decidePreRound(selection.total);
+const rest = selection.total.slice(match.length);
+selection.roundCount = roundCount;
+selection.match = match;
+selection.rest = rest;
+selection.record.push(match);
 
 const startSelection = () => {
-  router.push('/select')
-}
+  router.push('/select');
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+div {
+  width: 100%;
+}
+</style>
